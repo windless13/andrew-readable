@@ -82,3 +82,69 @@ export const deletePost = (id) => {
     })
     .then(res => res.json());
 }
+
+export const getCommentsFromPost = (postId) => {
+    return fetch(`${url}/posts/${postId}/comments`, { headers: header })
+        .then(res => res.json())
+}
+
+export const addCommentToPost = (postId, body, author) => {
+    return fetch(`${url}/comments`, {
+        method: 'POST',
+        headers: {
+            ...header,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id: uuid.v4(),
+            timestamp: Date.now(),
+            author,
+            body,
+            parentId: postId,
+        }),
+    })
+    .then(res => res.json());
+}
+
+export const getCommentFromId = (id) => {
+    return fetch(`${url}/comments/${id}`, { headers: header })
+        .then(res => res.json());
+}
+
+export const voteComment = (id, bool) => {
+    return fetch(`${url}/comments/${id}`, {
+        method: 'POST',
+        headers: {
+            ...header,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            option: (bool ? 'upVote' : 'downVote')
+        }),
+    })
+    .then(res => res.json());
+}
+
+export const editComment = (id, body) => {
+    return fetch(`${url}/comments/${id}`, {
+        method: 'PUT',
+        headers: {
+            ...header,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            timestamp: Date.now(),
+            body,
+        }),
+
+    })
+    .then(res => res.json());
+}
+
+export const deleteComment = (id) => {
+    return fetch(`${url}/comments/${id}`, {
+        method: 'DELETE',
+        headers: header,
+    })
+    .then(res => res.json());
+}
