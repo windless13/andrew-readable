@@ -16,7 +16,7 @@ export const getPosts = () => {
         .then(res => res.json())
 }
 
-export const addPost = (title, author, body, category) => {
+export const addPost = (id, timestamp, title, author, body, category) => {
     return fetch(`${url}/posts`, {
         method: 'POST',
         headers: {
@@ -88,7 +88,7 @@ export const getCommentsFromPost = (postId) => {
         .then(res => res.json())
 }
 
-export const addCommentToPost = (postId, body, author) => {
+export const addCommentToPost = (id, timestamp, postId, body, author) => {
     return fetch(`${url}/comments`, {
         method: 'POST',
         headers: {
@@ -96,8 +96,8 @@ export const addCommentToPost = (postId, body, author) => {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            id: uuid.v4(),
-            timestamp: Date.now(),
+            id,
+            timestamp,
             author,
             body,
             parentId: postId,
