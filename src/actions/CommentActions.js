@@ -5,7 +5,7 @@ import {
     DELETE_COMMENT,
 } from './types.js';
 
-export const addComment = (id, postId, timestamp, author, body) => {
+export const addComment = ({ id, postId, timestamp, author, body }) => {
     return {
         type: ADD_COMMENT,
         id,
@@ -16,7 +16,7 @@ export const addComment = (id, postId, timestamp, author, body) => {
     }
 }
 
-export const editComment = (id, timestamp, body) => {
+export const editComment = ({ id, timestamp, body }) => {
     return {
         type: EDIT_COMMENT,
         id,
@@ -25,7 +25,7 @@ export const editComment = (id, timestamp, body) => {
     }
 }
 
-export const voteComment = (id, voteBool) => {
+export const voteComment = ({ id, voteBool }) => {
     return {
         type: VOTE_COMMENT,
         id,
@@ -33,7 +33,7 @@ export const voteComment = (id, voteBool) => {
     }
 }
 
-export const deleteComment = (id) => {
+export const deleteComment = ({ id }) => {
     return {
         type: DELETE_COMMENT,
         id,

@@ -1,19 +1,22 @@
+import _ from 'lodash';
 import {
     ADD_POST,
     EDIT_POST,
     VOTE_POST,
     DELETE_POST,
+    RECEIVE_POSTS,
 } from '../actions/types.js';
 
-const post = (state = {}, action) => {
+export const post = (state = {}, action) => {
     const {
         id,
         timestamp,
-        title
+        title,
         author,
         body,
         category,
         voteBool,
+        posts,
     } = action;
 
     switch (action.type) {
@@ -60,9 +63,24 @@ const post = (state = {}, action) => {
         case DELETE_POST:
             return {
                 ...state,
-                posts: _.filter(posts, (post) => {
+                posts: _.filter(state.posts, (post) => {
                     return post.id !== id;
                 }),
+            };
+        case RECEIVE_POSTS:
+            return {
+                ...state,
+                posts: _.reduce(posts, (result, value) => {
+                    result[value.id] = {
+                        timestamp: value.timestamp,
+                        title: value.title,
+                        body: value.body,
+                        author: value.author,
+                        voteScore: value.voteScore,
+                        category: value.category,
+                    };
+                    return result;
+                }, {}),
             };
         default:
             return state;

@@ -6,7 +6,7 @@ import {
     DELETE_COMMENT,
 } from '../actions/types.js';
 
-const comment = (state = {}, action) => {
+export const comment = (state = {}, action) => {
     const {
         id,
         postId,
@@ -59,7 +59,7 @@ const comment = (state = {}, action) => {
         case DELETE_COMMENT:
             return {
                 ...state,
-                comments: _.filter(comments, (comment) => {
+                comments: _.filter(state.comments, (comment) => {
                     return comment.id !== id;
                 }),
             };
