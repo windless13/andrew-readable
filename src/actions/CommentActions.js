@@ -3,6 +3,7 @@ import {
     EDIT_COMMENT,
     VOTE_COMMENT,
     DELETE_COMMENT,
+    RECEIVE_COMMENTS,
 } from './types.js';
 
 export const addComment = ({ id, postId, timestamp, author, body }) => {
@@ -39,3 +40,8 @@ export const deleteComment = ({ id }) => {
         id,
     }
 }
+
+export const receiveComments = (comments) => ({
+    type: RECEIVE_COMMENTS,
+    comments,
+})

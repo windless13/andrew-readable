@@ -7,17 +7,13 @@ import PostList from './components/PostList.js';
 import Header from './components/Header.js';
 import SideNav from './components/SideNav.js';
 
-import { addPost, receivePosts } from './actions';
+import { addPost, receivePosts, receiveComments } from './actions';
 
 
 class Readable extends React.Component {
     componentDidMount() {
-        console.log('hi');
-        console.log(this.props);
-        this.addPost();
         ReadableAPI.getPosts().then((result) => {
             this.props.receivePosts(result);
-            console.log(result);
         });
     }
 
@@ -33,6 +29,15 @@ class Readable extends React.Component {
     }
 
     render() {
+        const {
+            posts,
+            comments,
+        } = this.props;
+
+        console.log('readable render');
+        console.log(this.props);
+        console.log(posts);
+
         return (
             <div>
                 <Header/>
@@ -40,19 +45,20 @@ class Readable extends React.Component {
                 <Route
                     exact path='/'
                     render={() => (
-                        <PostList />
+                        <PostList posts={posts} />
                     )}
                 >
                 </Route>
+
             </div>
         );
     }
 }
 
-function mapStateToProps ({ posts, comments }) {
+function mapStateToProps ({ post, comment }) {
     return {
-        posts,
-        comments,
+        posts: post.posts,
+        comments: comment.comments,
     };
 }
 
@@ -60,6 +66,7 @@ function mapDispatchToProps (dispatch) {
     return {
         addPost: (data) => dispatch(addPost(data)),
         receivePosts: (data) => dispatch(receivePosts(data)),
+        receiveComments: (data) => dispatch(receiveComments(data)),
     }
 }
 

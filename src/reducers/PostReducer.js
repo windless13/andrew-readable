@@ -26,6 +26,7 @@ export const post = (state = {}, action) => {
                 posts: {
                     ...state.posts,
                     id: {
+                        id,
                         timestamp,
                         title,
                         body,
@@ -72,6 +73,7 @@ export const post = (state = {}, action) => {
                 ...state,
                 posts: _.reduce(posts, (result, value) => {
                     result[value.id] = {
+                        id: value.id,
                         timestamp: value.timestamp,
                         title: value.title,
                         body: value.body,

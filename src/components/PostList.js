@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 
 import Post from './Post.js';
 import { COLORS } from '../constants.js';
@@ -13,14 +14,26 @@ const test = [1, 2, 3, 4, 5];
 
 export default class PostList extends React.Component {
     render() {
+        const {
+            posts,
+        } = this.props;
+
+        console.log('redner');
+        console.log(posts);
+        console.log(this.props);
+
         return (
             <List>
-                { _.map(test, (item) => {
+                { _.map(posts, (post) => {
                     return (
-                        <Post post={item} />
+                        <Post key={post.id} post={post} />
                     )
                 })}
             </List>
         );
     }
 }
+
+PostList.propTypes = {
+    posts: PropTypes.shape({}),
+};

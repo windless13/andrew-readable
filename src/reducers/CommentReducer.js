@@ -4,6 +4,7 @@ import {
     EDIT_COMMENT,
     VOTE_COMMENT,
     DELETE_COMMENT,
+    RECEIVE_COMMENTS,
 } from '../actions/types.js';
 
 export const comment = (state = {}, action) => {
@@ -14,6 +15,7 @@ export const comment = (state = {}, action) => {
         author,
         body,
         voteBool,
+        comments,
     } = action;
 
     switch (action.type) {
@@ -23,6 +25,7 @@ export const comment = (state = {}, action) => {
                 comments: {
                     ...state.comments,
                     id: {
+                        id,
                         postId,
                         timestamp,
                         author,
@@ -63,6 +66,21 @@ export const comment = (state = {}, action) => {
                     return comment.id !== id;
                 }),
             };
+        case RECEIVE_COMMENTS:
+            return {
+                ...state,
+                comments: _.reduce(comments, (result, value) => {
+                    result[value.id] = {
+                        id: value.id,
+                        postId: value.parentId,
+                        timestamp: value.timestamp,
+                        body: value.body,
+                        author: value.author,
+                        voteScore: value.voteScore,
+                    };
+                    return result;
+                }, {}),
+            }
         default:
             return state;
     }
