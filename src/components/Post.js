@@ -20,6 +20,8 @@ const Body = styled.div`
 
 class Post extends React.Component {
     render() {
+        if (!this.props.post) return null;
+
         const {
             id,
             title,

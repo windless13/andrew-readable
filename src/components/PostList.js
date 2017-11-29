@@ -8,6 +8,7 @@ import { COLORS } from '../constants.js';
 
 const List = styled.ul`
     background-color: ${COLORS.yellow3};
+    width: 100%;
 `
 
 const test = [1, 2, 3, 4, 5];
@@ -17,10 +18,6 @@ export default class PostList extends React.Component {
         const {
             posts,
         } = this.props;
-
-        console.log('redner');
-        console.log(posts);
-        console.log(this.props);
 
         return (
             <List>
@@ -35,5 +32,5 @@ export default class PostList extends React.Component {
 }
 
 PostList.propTypes = {
-    posts: PropTypes.shape({}),
+    posts: PropTypes.arrayOf(PropTypes.shape({})),
 };
