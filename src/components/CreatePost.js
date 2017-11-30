@@ -20,7 +20,7 @@ const Wrapper = styled.div`
     flex-direction: column;
 `;
 
-const SubmitForm = styled.input`
+const SubmitFormButton = styled.button`
 `;
 
 
@@ -43,13 +43,16 @@ class CreatePost extends React.Component {
             author,
             body,
             category,
+            edit,
+            posts,
         } = props;
 
+        debugger;
         this.state = {
-            title,
-            body,
-            author,
-            category,
+            title: (edit && edit.title) || '',
+            body: (edit && edit.body) || '',
+            author: (edit && edit.author) || '',
+            category: (edit && edit.category) || '',
             categories: [],
             redirect: false,
             errors: {
@@ -102,21 +105,22 @@ class CreatePost extends React.Component {
     handleSubmitForm(event) {
         const { id, author, category, body, title, timestamp } = this.state;
 
+        if (this.validateForm()) {
+            ReadableAPI.addPost(null, null, title, author, body, category).then((result) => {
+                this.props.addPost({
+                    id: result.id,
+                    timestamp: result.timestamp,
+                    title,
+                    body,
+                    author,
+                    category,
+                });
 
-        ReadableAPI.addPost(null, null, title, author, body, category).then((result) => {
-            this.props.addPost({
-                id: result.id,
-                timestamp: result.timestamp,
-                title,
-                body,
-                author,
-                category,
+                this.setState({
+                    redirect: true,
+                });
             });
-
-            this.setState({
-                redirect: true,
-            });
-        });
+        }
     }
 
     handleClearForm(event) {
@@ -126,6 +130,24 @@ class CreatePost extends React.Component {
             category: '',
             author: '',
         });
+    }
+
+    validateForm() {
+        const { author, category, body, title } = this.state;
+
+        this.setState({
+            errors: {
+                title: _.isEmpty(title),
+                body: _.isEmpty(body),
+                author: _.isEmpty(author),
+                category: _.isEmpty(category),
+            },
+        });
+
+        return !_.isEmpty(title)
+            && !_.isEmpty(body)
+            && !_.isEmpty(author)
+            && !_.isEmpty(category);
     }
 
     updateErrors(input, error) {
@@ -163,43 +185,39 @@ class CreatePost extends React.Component {
                     label='Title'
                     value={title}
                     onChange={this.handleTitle}
-                    error={errors}
-                    updateErrors={updateErrors}
+                    errors={errors}
+                    updateErrors={this.updateErrors}
                 />
 
                 <TextInput
                     label='Author'
                     value={author}
                     onChange={this.handleAuthor}
-                    error={errors}
-                    updateErrors={updateErrors}
+                    errors={errors}
+                    updateErrors={this.updateErrors}
                 />
 
                 <Select
-                    label='Categoryz'
+                    label='Category'
                     value={category}
                     onChange={this.handleCategory}
                     categories={categories}
                     errors={errors}
-                    updateErrors={updateErrors}
+                    updateErrors={this.updateErrors}
                 />
 
                 <TextAreaInput
                     label='Post'
                     value={body}
                     onChange={this.handleBody}
-                    error={errors}
-                    updateErrors={updateErrors}
+                    errors={errors}
+                    updateErrors={this.updateErrors}
                 />
 
                 <Navigation>
-                    <SubmitForm
-                        type="submit"
-                        className="btn btn-primary float-right"
-                        value="Submit"
-                        onClick={this.handleSubmitForm}
-
-                    />
+                    <SubmitFormButton onClick={this.handleSubmitForm}>
+                        { this.props.edit ? 'Save' : 'Submit' }
+                    </SubmitFormButton>
                     <ClearForm
                         className="btn btn-link float-left"
                         onClick={this.handleClearForm}
@@ -219,8 +237,15 @@ CreatePost.propTypes = {
     body: PropTypes.string,
     category: PropTypes.string,
     timestamp: PropTypes.number,
-    isNew: PropTypes.bool,
+    edit: PropTypes.shape(),
 };
+
+function mapStateToProps ({ post, comment }) {
+    debugger;
+    return {
+        posts: post.posts,
+    };
+}
 
 function mapDispatchToProps (dispatch) {
     return {
@@ -229,6 +254,6 @@ function mapDispatchToProps (dispatch) {
 }
 
 export default withRouter(connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(CreatePost));

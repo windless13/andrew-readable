@@ -9,7 +9,6 @@ import * as ReadableAPI from './ReadableAPI.js';
 
 import Post from './components/Post.js';
 import CreatePost from './components/CreatePost.js';
-import EditPost from './components/EditPost.js';
 import PostList from './components/PostList.js';
 import Header from './components/Header.js';
 import SideNav from './components/SideNav.js';
@@ -51,6 +50,17 @@ class Readable extends React.Component {
             posts,
             comments,
         } = this.props;
+
+        this.test = posts;
+
+        const EditPost = function(props) {
+            const id = props.match.params.id;
+            const post = id && posts && posts[id];
+
+            return (
+                <CreatePost edit={post} />
+            );
+        }.bind(this);
 
         const CategoryPage = (props) => {
             const category = props.match.params.category;

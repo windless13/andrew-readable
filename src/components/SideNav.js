@@ -22,7 +22,7 @@ export default class SideNav extends React.Component {
             <Container>
                 {categories.map((category) => {
                     return (
-                        <Link to={`/${category}`}>
+                        <Link key={category} to={`/${category}`}>
                             <SideBarLink>{category}</SideBarLink>
                         </Link>
                     );
