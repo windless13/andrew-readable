@@ -47,7 +47,6 @@ export default class CommentSection extends React.Component {
             <Container>
                 <Header>Add a Comment</Header>
                 {_.map(comments, (comment) => {
-                    debugger;
                     return (
                         editCommentOpen && (edit && edit.id === comment.id)
                         ? <CreateComment

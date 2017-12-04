@@ -25,7 +25,7 @@ export const post = (state = {}, action) => {
                 ...state,
                 posts: {
                     ...state.posts,
-                    id: {
+                    [id]: {
                         id,
                         timestamp,
                         title,

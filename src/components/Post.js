@@ -10,7 +10,7 @@ import Vote from './Vote.js';
 import CommentSection from './CommentSection.js';
 import { COLORS } from '../constants.js';
 import * as ReadableAPI from '../ReadableAPI.js';
-import { addPost, receiveComments, votePost } from '../actions';
+import { addPost, receiveComments, votePost, deletePost } from '../actions';
 
 const Title = styled.div`
     font: 18px 'Helvetica';
@@ -24,6 +24,9 @@ const Body = styled.div`
     background-color: ${COLORS.yellow2};
     font: 14px 'Helvetica';
 `
+
+const Delete = styled.div`
+`;
 
 class Post extends React.Component {
     componentDidMount() {
@@ -45,7 +48,7 @@ class Post extends React.Component {
     };
 
     downVote = () => {
-        const { post, votePost } = this. props;
+        const { post, votePost } = this.props;
         const id = post.id;
 
         ReadableAPI.votePost(this.props.post.id, false).then(() => {
@@ -53,6 +56,13 @@ class Post extends React.Component {
         });
 
     };
+
+    deletePost = () => {
+        const { post, deletePost } = this.props;
+        ReadableAPI.deletePost(post.id).then(() => {
+            deletePost({ id: post.id });
+        });
+    }
 
     render() {
         const { comments, posts, post } = this.props;
@@ -69,7 +79,7 @@ class Post extends React.Component {
         } = post;
 
         const commentsForPost = comments && id && _.filter(comments, ['postId', id]);
-        const currentVoteScore = posts && id && posts[id].voteScore;
+        const currentVoteScore = id && posts[id] && posts[id].voteScore;
         return (
             <div>
                 <Link to={`/post/${id}`}>
@@ -88,6 +98,11 @@ class Post extends React.Component {
                         score={currentVoteScore}
                     />
                 </Middle>
+                <Delete
+                    onClick={() => {
+                        this.deletePost();
+                    }}
+                >Delete</Delete>
                 <CommentSection postId={id} comments={commentsForPost} />
             </div>
         );
@@ -117,6 +132,7 @@ function mapDispatchToProps (dispatch) {
     return {
         addPost: (data) => dispatch(addPost(data)),
         votePost: (data) => dispatch(votePost(data)),
+        deletePost: (data) => dispatch(deletePost(data)),
         receiveComments: (data) => dispatch(receiveComments(data)),
     }
 }

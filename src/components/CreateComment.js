@@ -72,6 +72,8 @@ class CreateComment extends React.Component {
         const { postId, addComment, editComment, onClose, edit } = this.props;
         const { id, author, body, timestamp } = this.state;
 
+        debugger;
+
         if (this.validateForm()) {
             if (edit) {
                 ReadableAPI.editComment(id, body).then((result) => {
