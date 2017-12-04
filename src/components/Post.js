@@ -5,14 +5,20 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom'
 
+
+import Vote from './Vote.js';
 import CommentSection from './CommentSection.js';
 import { COLORS } from '../constants.js';
 import * as ReadableAPI from '../ReadableAPI.js';
-import { addPost, receiveComments } from '../actions';
+import { addPost, receiveComments, votePost } from '../actions';
 
 const Title = styled.div`
     font: 18px 'Helvetica';
 `
+const Middle = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
 
 const Body = styled.div`
     background-color: ${COLORS.yellow2};
@@ -29,9 +35,28 @@ class Post extends React.Component {
         }
     }
 
+    upVote = () => {
+        const { post, votePost } = this.props;
+        const id = post.id;
+
+        ReadableAPI.votePost(id, votePost).then(() => {
+            votePost({ id, voteBool: true });
+        });
+    };
+
+    downVote = () => {
+        const { post, votePost } = this. props;
+        const id = post.id;
+
+        ReadableAPI.votePost(this.props.post.id, false).then(() => {
+            votePost({ id, voteBool: false });
+        });
+
+    };
+
     render() {
-        const { comments, post } = this.props;
-        if (!post) return null;
+        const { comments, posts, post } = this.props;
+        if (!post || !posts) return null;
 
         const {
             id,
@@ -44,18 +69,25 @@ class Post extends React.Component {
         } = post;
 
         const commentsForPost = comments && id && _.filter(comments, ['postId', id]);
-
+        const currentVoteScore = posts && id && posts[id].voteScore;
         return (
             <div>
                 <Link to={`/post/${id}`}>
                     <Title>{title}</Title>
                 </Link>
-                <Body>
-                    {body}
-                    <div>{id}</div>
-                    <div>{category}</div>
-                    <div>{timestamp}</div>
-                </Body>
+                <Middle>
+                    <Body>
+                        {body}
+                        <div>{id}</div>
+                        <div>{category}</div>
+                        <div>{timestamp}</div>
+                    </Body>
+                    <Vote
+                        onIncrement={this.upVote.bind(this)}
+                        onDecrement={this.downVote.bind(this)}
+                        score={currentVoteScore}
+                    />
+                </Middle>
                 <CommentSection postId={id} comments={commentsForPost} />
             </div>
         );
@@ -74,8 +106,9 @@ Post.propTypes = {
     }),
 }
 
-function mapStateToProps ({ comment }) {
+function mapStateToProps ({ comment, post }) {
     return {
+        posts: post.posts,
         comments: comment.comments,
     };
 }
@@ -83,6 +116,7 @@ function mapStateToProps ({ comment }) {
 function mapDispatchToProps (dispatch) {
     return {
         addPost: (data) => dispatch(addPost(data)),
+        votePost: (data) => dispatch(votePost(data)),
         receiveComments: (data) => dispatch(receiveComments(data)),
     }
 }

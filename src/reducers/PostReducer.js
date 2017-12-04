@@ -50,15 +50,16 @@ export const post = (state = {}, action) => {
                 },
             };
         case VOTE_POST:
+            debugger;
             return {
                 ...state,
                 posts: {
                     ...state.posts,
-                    id: {
-                        ...state.posts.id,
+                    [id]: {
+                        ...state.posts[id],
                         voteScore: voteBool
-                            ? state.posts.id.voteScore + 1
-                            : state.posts.id.voteScore - 1,
+                            ? state.posts[id].voteScore + 1
+                            : state.posts[id].voteScore - 1,
                     },
                 },
             };

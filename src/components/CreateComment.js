@@ -37,7 +37,6 @@ class CreateComment extends React.Component {
         super(props);
 
         const { edit } = props;
-        debugger;
         this.state = {
             id: (edit && edit.id) || null,
             timestamp: (edit && edit.timestamp) || null,
@@ -75,7 +74,6 @@ class CreateComment extends React.Component {
 
         if (this.validateForm()) {
             if (edit) {
-                debugger;
                 ReadableAPI.editComment(id, body).then((result) => {
                     editComment({ id, timestamp, body });
                 });

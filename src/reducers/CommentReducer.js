@@ -51,11 +51,11 @@ export const comment = (state = {}, action) => {
                 ...state,
                 comments: {
                     ...state.comments,
-                    id: {
-                        ...state.comments.id,
+                    [id]: {
+                        ...state.comments[id],
                         voteScore: voteBool
-                            ? state.comments.id.voteScore + 1
-                            : state.comments.id.voteScore - 1,
+                            ? state.comments[id].voteScore + 1
+                            : state.comments[id].voteScore - 1,
                     },
                 },
             };
