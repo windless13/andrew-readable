@@ -2,34 +2,22 @@ import React from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { addPost, editPost } from '../actions';
 import { withRouter, Redirect } from 'react-router';
 import { connect } from 'react-redux';
+
 import { COLORS } from '../constants.js';
 import * as ReadableAPI from '../ReadableAPI.js';
+import { addPost, editPost } from '../actions';
 import {
     TextInput,
     TextAreaInput,
     Select,
+    FormButtons,
 } from './form-inputs';
-export const InputLabel = styled.div`
-    padding: 10px 0;
-`;
+
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
-`;
-
-const SubmitFormButton = styled.button`
-`;
-
-
-const ClearForm = styled.button`
-`;
-
-const Navigation = styled.div`
-    display: flex;
-    justify-content: space-between;
 `;
 
 class CreatePost extends React.Component {
@@ -97,13 +85,15 @@ class CreatePost extends React.Component {
     handleSubmitForm(event) {
         const { edit } = this.props;
         const { id, author, category, body, title, timestamp } = this.state;
-        debugger;
+
         if (this.validateForm()) {
             if (edit) {
+                // Edit existing post
                 ReadableAPI.editPost(id, title, body).then((result) => {
                     this.props.editPost({ id, title, body });
                 });
             } else {
+                // Create new post
                 ReadableAPI.addPost(null, null, title, author, body, category).then((result) => {
                     this.props.addPost({
                         id: result.id,
@@ -122,12 +112,19 @@ class CreatePost extends React.Component {
     }
 
     handleClearForm(event) {
-        this.setState({
-            body: '',
-            title: '',
-            category: '',
-            author: '',
-        });
+        if (this.props.edit) {
+            this.setState({
+                body: '',
+                title: '',
+            });
+        } else {
+            this.setState({
+                body: '',
+                title: '',
+                category: '',
+                author: '',
+            });
+        }
     }
 
     validateForm() {
@@ -172,6 +169,7 @@ class CreatePost extends React.Component {
             errors,
         } = this.state;
 
+        // Redirect to category page after post is created
         if (redirect) {
             return (
                 <Redirect to={`/${category}`} />
@@ -217,17 +215,11 @@ class CreatePost extends React.Component {
                     updateErrors={this.updateErrors}
                 />
 
-                <Navigation>
-                    <SubmitFormButton onClick={this.handleSubmitForm}>
-                        { this.props.edit    ? 'Save' : 'Submit' }
-                    </SubmitFormButton>
-                    <ClearForm
-                        className="btn btn-link float-left"
-                        onClick={this.handleClearForm}
-                    >
-                        Clear form
-                    </ClearForm>
-                </Navigation>
+                <FormButtons
+                    handleClearForm={this.handleClearForm}
+                    handleSubmitForm={this.handleSubmitForm}
+                    edit={edit}
+                />
             </Wrapper>
         );
     }

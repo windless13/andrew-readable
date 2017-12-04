@@ -2,34 +2,22 @@ import React from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { addComment, editComment } from '../actions';
 import { withRouter, Redirect } from 'react-router';
 import { connect } from 'react-redux';
+
 import { COLORS } from '../constants.js';
+import { addComment, editComment } from '../actions';
 import * as ReadableAPI from '../ReadableAPI.js';
 import {
     TextInput,
     TextAreaInput,
     Select,
+    FormButtons,
 } from './form-inputs';
-export const InputLabel = styled.div`
-    padding: 10px 0;
-`;
+
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
-`;
-
-const SubmitFormButton = styled.button`
-`;
-
-
-const ClearForm = styled.button`
-`;
-
-const Navigation = styled.div`
-    display: flex;
-    justify-content: space-between;
 `;
 
 class CreateComment extends React.Component {
@@ -72,15 +60,15 @@ class CreateComment extends React.Component {
         const { postId, addComment, editComment, onClose, edit } = this.props;
         const { id, author, body, timestamp } = this.state;
 
-        debugger;
-
         if (this.validateForm()) {
             if (edit) {
+                // Edit the selected comment
                 ReadableAPI.editComment(id, body).then((result) => {
                     editComment({ id, timestamp, body });
                 });
                 onClose();
             } else {
+                // Create new comment
                 ReadableAPI.addCommentToPost(null, null, postId, body, author).then((result) => {
                     addComment({
                         id: result.id,
@@ -96,10 +84,16 @@ class CreateComment extends React.Component {
     }
 
     handleClearForm() {
-        this.setState({
-            body: '',
-            author: '',
-        });
+        if (this.props.edit) {
+            this.setState({
+                body: '',
+            });
+        } else {
+            this.setState({
+                body: '',
+                author: '',
+            });
+        }
     }
 
     validateForm() {
@@ -155,17 +149,11 @@ class CreateComment extends React.Component {
                     />
                 }
 
-                <Navigation>
-                    <SubmitFormButton onClick={this.handleSubmitForm}>
-                        { this.props.edit    ? 'Save' : 'Submit' }
-                    </SubmitFormButton>
-                    <ClearForm
-                        className="btn btn-link float-left"
-                        onClick={this.handleClearForm}
-                    >
-                        Clear form
-                    </ClearForm>
-                </Navigation>
+                <FormButtons
+                    handleClearForm={this.handleClearForm}
+                    handleSubmitForm={this.handleSubmitForm}
+                    edit={edit}
+                />
             </Wrapper>
         );
     }

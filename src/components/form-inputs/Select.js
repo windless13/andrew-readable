@@ -34,7 +34,9 @@ export const Select = ({
                     onChange(event);
                 }}
             >
+                {/* List of options in dropdown */}
                 <option disabled hidden value=''></option>
+
                 {_.map(categories, category =>
                     <option key={category} value={category}>{category}</option>
                 )}
@@ -54,5 +56,3 @@ Select.propTypes = {
     categories: PropTypes.arrayOf(PropTypes.string),
     errors: PropTypes.shape(),
 }
-
-

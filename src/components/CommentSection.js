@@ -1,9 +1,10 @@
 import React from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
-import Comment from './Comment.js';
-import { COLORS } from '../constants.js';
 import PropTypes from 'prop-types';
+
+import { COLORS } from '../constants.js';
+import Comment from './Comment.js';
 import CreateComment from './CreateComment.js';
 
 const Header = styled.div`

@@ -1,14 +1,11 @@
 import React from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
-
-import RightMenu from './RightMenu.js';
-import { COLORS } from '../constants.js';
 import { Route, Link } from 'react-router-dom'
 
+import { COLORS } from '../constants.js';
+import RightMenu from './RightMenu.js';
 import HamburgerIcon from '../icons/down.svg';
-
-
 
 const MobileMenu = styled.div`
     position: absolute;
@@ -31,17 +28,15 @@ const Container = styled.div`
     position: relative;
 `
 
-export default class Header extends React.Component {
-    render(){
-        return (
-            <Container>
-                <MobileMenu />
-                <Link to='/'>
-                    Readable
-                </Link>
+export default function Header() {
+    return (
+        <Container>
+            <MobileMenu />
+            <Link to='/'>
+                Readable
+            </Link>
 
-                <RightMenu/>
-            </Container>
-        );
-    }
+            <RightMenu/>
+        </Container>
+    );
 }

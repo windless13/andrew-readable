@@ -1,11 +1,11 @@
 import React from 'react';
 import _ from 'lodash';
-import {Icon} from 'react-fa'
-
-import styled from 'styled-components';
-import { COLORS } from '../constants.js';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
+
+import { COLORS } from '../constants.js';
 import FaBeer from 'react-icons/lib/fa/beer';
+import { Icon } from 'react-fa'
 
 var FontAwesome = require('react-fontawesome');
 const Container = styled.div`
@@ -38,6 +38,3 @@ Vote.propTypes = {
     onIncrement: PropTypes.func,
     onDecrement: PropTypes.func,
 }
-
-
-

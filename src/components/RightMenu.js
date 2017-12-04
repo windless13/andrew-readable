@@ -7,12 +7,10 @@ const Container = styled.div`
     top: 0;
 `
 
-export default class RightMenu extends React.Component {
-    render(){
-        return (
-            <Container>
-                Right Menu!
-            </Container>
-        );
-    }
+export default function RightMenu() {
+    return (
+        <Container>
+            Right Menu!
+        </Container>
+    );
 }

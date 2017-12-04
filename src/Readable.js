@@ -6,15 +6,14 @@ import { connect } from 'react-redux'
 import styled from 'styled-components';
 
 import * as ReadableAPI from './ReadableAPI.js';
+import { receivePosts } from './actions';
 
 import Post from './components/Post.js';
 import CreatePost from './components/CreatePost.js';
 import PostList from './components/PostList.js';
 import Header from './components/Header.js';
 import SideNav from './components/SideNav.js';
-import AddPost from './components/AddPost.js';
-
-import { addPost, receivePosts } from './actions';
+import AddPostSticky from './components/AddPostSticky.js';
 
 const Body = styled.div`
     display: flex;
@@ -35,25 +34,13 @@ class Readable extends React.Component {
         });
     }
 
-    addPost() {
-        this.props.addPost({
-            id: 'fake id',
-            timestamp: 'fakew timestamp',
-            title: 'title',
-            author: 'author',
-            body: 'body',
-            category: 'react',
-        });
-    }
-
     render() {
         const {
             posts,
         } = this.props;
 
-        this.test = posts;
-
-        const EditPost = function(props) {
+        // Route Components "pages"
+        const EditPostPage = function(props) {
             const id = props.match.params.id;
             const post = id && posts && posts[id];
 
@@ -104,7 +91,7 @@ class Readable extends React.Component {
                         </Route>
                         <Route
                             exact path='/post/:id/edit'
-                            component={EditPost}
+                            component={EditPostPage}
                         >
                         </Route>
                         <Route
@@ -119,7 +106,7 @@ class Readable extends React.Component {
                         </Route>
                     </Switch>
                 </Body>
-                <AddPost />
+                <AddPostSticky />
             </div>
         );
     }
@@ -133,7 +120,6 @@ function mapStateToProps ({ post }) {
 
 function mapDispatchToProps (dispatch) {
     return {
-        addPost: (data) => dispatch(addPost(data)),
         receivePosts: (data) => dispatch(receivePosts(data)),
     }
 }

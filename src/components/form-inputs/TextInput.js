@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import styled from 'styled-components';
 import { InputLabel, ErrorsMessage } from './InputStyles.js';
 
@@ -23,8 +22,6 @@ export const TextInput = ({
         || (errors.author && label === 'Author'));
 
     const handleOnFocus = () => {
-        console.log('focus');
-        console.log(this);
         updateErrors((label === 'Title' && 'title') || (label === 'Author' && 'author'), false);
     }
 

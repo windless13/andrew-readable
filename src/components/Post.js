@@ -5,12 +5,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom'
 
-
-import Vote from './Vote.js';
-import CommentSection from './CommentSection.js';
 import { COLORS } from '../constants.js';
 import * as ReadableAPI from '../ReadableAPI.js';
 import { addPost, receiveComments, votePost, deletePost } from '../actions';
+
+import Vote from './Vote.js';
+import CommentSection from './CommentSection.js';
 
 const Title = styled.div`
     font: 18px 'Helvetica';
@@ -80,6 +80,7 @@ class Post extends React.Component {
 
         const commentsForPost = comments && id && _.filter(comments, ['postId', id]);
         const currentVoteScore = id && posts[id] && posts[id].voteScore;
+
         return (
             <div>
                 <Link to={`/post/${id}`}>
@@ -98,11 +99,16 @@ class Post extends React.Component {
                         score={currentVoteScore}
                     />
                 </Middle>
+                <Link to={`/post/${id}/edit`}>
+                    Edit
+                </Link>
                 <Delete
                     onClick={() => {
                         this.deletePost();
                     }}
-                >Delete</Delete>
+                >
+                    Delete
+                </Delete>
                 <CommentSection postId={id} comments={commentsForPost} />
             </div>
         );

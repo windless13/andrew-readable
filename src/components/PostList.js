@@ -2,9 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-
-import Post from './Post.js';
 import { COLORS } from '../constants.js';
+import Post from './Post.js';
 
 const List = styled.ul`
     background-color: ${COLORS.yellow3};
@@ -19,6 +18,7 @@ export default class PostList extends React.Component {
 
     getFilteredPosts() {
         const { posts } = this.props;
+
         if (this.state.filter === 'timestamp') {
             return _.filter(posts, 'timestamp');
         } else if (this.state.filter === 'vote') {

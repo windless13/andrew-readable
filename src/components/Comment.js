@@ -2,8 +2,9 @@ import React from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { COLORS } from '../constants.js';
 import PropTypes from 'prop-types';
+
+import { COLORS } from '../constants.js';
 import * as ReadableAPI from '../ReadableAPI.js';
 import { voteComment, deleteComment } from '../actions';
 
