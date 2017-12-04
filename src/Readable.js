@@ -12,8 +12,9 @@ import CreatePost from './components/CreatePost.js';
 import PostList from './components/PostList.js';
 import Header from './components/Header.js';
 import SideNav from './components/SideNav.js';
+import AddPost from './components/AddPost.js';
 
-import { addPost, receivePosts, receiveComments } from './actions';
+import { addPost, receivePosts } from './actions';
 
 const Body = styled.div`
     display: flex;
@@ -48,7 +49,6 @@ class Readable extends React.Component {
     render() {
         const {
             posts,
-            comments,
         } = this.props;
 
         this.test = posts;
@@ -73,9 +73,11 @@ class Readable extends React.Component {
 
         const PostPage = (props) => {
             const postId = props.match.params.id;
-            const post = !posts || posts[postId];
-            console.log(postId);
-            console.log(post);
+            let post = null;
+            if (posts && postId) {
+                post = posts[postId];
+            }
+
             return (
                 <Post post={post} />
             )
@@ -117,15 +119,15 @@ class Readable extends React.Component {
                         </Route>
                     </Switch>
                 </Body>
+                <AddPost />
             </div>
         );
     }
 }
 
-function mapStateToProps ({ post, comment }) {
+function mapStateToProps ({ post }) {
     return {
         posts: post.posts,
-        comments: comment.comments,
     };
 }
 
@@ -133,7 +135,6 @@ function mapDispatchToProps (dispatch) {
     return {
         addPost: (data) => dispatch(addPost(data)),
         receivePosts: (data) => dispatch(receivePosts(data)),
-        receiveComments: (data) => dispatch(receiveComments(data)),
     }
 }
 

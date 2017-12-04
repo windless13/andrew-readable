@@ -96,14 +96,14 @@ export const addCommentToPost = (id, timestamp, postId, body, author) => {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            id,
-            timestamp,
+            id: uuid.v4(),
+            timestamp: Date.now(),
             author,
             body,
             parentId: postId,
         }),
     })
-    .then(res => res.json());
+    .then(res => res.json())
 }
 
 export const getCommentFromId = (id) => {

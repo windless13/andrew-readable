@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { addPost, editPost } from '../actions';
+import { addComment, editComment } from '../actions';
 import { withRouter, Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import { COLORS } from '../constants.js';
@@ -32,59 +32,34 @@ const Navigation = styled.div`
     justify-content: space-between;
 `;
 
-class CreatePost extends React.Component {
+class CreateComment extends React.Component {
     constructor(props) {
         super(props);
 
         const { edit } = props;
-
+        debugger;
         this.state = {
             id: (edit && edit.id) || null,
-            timestamp: (edit && edit.title) || null,
-            title: (edit && edit.title) || '',
+            timestamp: (edit && edit.timestamp) || null,
             body: (edit && edit.body) || '',
             author: (edit && edit.author) || '',
-            category: (edit && edit.category) || '',
-            categories: [],
-            redirect: false,
             errors: {
-                title: false,
                 author: false,
                 body: false,
-                category: false,
             },
         };
 
         this.handleBody = this.handleBody.bind(this);
-        this.handleTitle = this.handleTitle.bind(this);
-        this.handleCategory = this.handleCategory.bind(this);
         this.handleAuthor = this.handleAuthor.bind(this);
         this.handleClearForm = this.handleClearForm.bind(this);
         this.handleSubmitForm = this.handleSubmitForm.bind(this);
         this.updateErrors = this.updateErrors.bind(this);
     }
 
-    componentWillMount() {
-        ReadableAPI.getCategories().then((result) => {
-            this.setState({ categories: _.map(result, 'name') });
-        });
-    }
-
     handleBody(event) {
+        console.log(event.target.value);
         this.setState({
             body: event.target.value,
-        });
-    }
-
-    handleTitle(event) {
-        this.setState({
-            title: event.target.value,
-        });
-    }
-
-    handleCategory(event) {
-        this.setState({
-            category: event.target.value,
         });
     }
 
@@ -95,37 +70,34 @@ class CreatePost extends React.Component {
     }
 
     handleSubmitForm(event) {
-        const { edit } = this.props;
-        const { id, author, category, body, title, timestamp } = this.state;
-        debugger;
+        const { postId, addComment, editComment, onClose, edit } = this.props;
+        const { id, author, body, timestamp } = this.state;
+
         if (this.validateForm()) {
             if (edit) {
-                ReadableAPI.editPost(id, title, body).then((result) => {
-                    this.props.editPost({ id, title, body });
+                debugger;
+                ReadableAPI.editComment(id, body).then((result) => {
+                    editComment({ id, timestamp, body });
                 });
+                onClose();
             } else {
-                ReadableAPI.addPost(null, null, title, author, body, category).then((result) => {
-                    this.props.addPost({
+                ReadableAPI.addCommentToPost(null, null, postId, body, author).then((result) => {
+                    addComment({
                         id: result.id,
                         timestamp: result.timestamp,
-                        title,
-                        body,
+                        postId,
                         author,
-                        category,
+                        body,
                     });
+                    this.handleClearForm();
                 });
             }
-            this.setState({
-                redirect: true,
-            });
         }
     }
 
-    handleClearForm(event) {
+    handleClearForm() {
         this.setState({
             body: '',
-            title: '',
-            category: '',
             author: '',
         });
     }
@@ -135,17 +107,13 @@ class CreatePost extends React.Component {
 
         this.setState({
             errors: {
-                title: _.isEmpty(title),
                 body: _.isEmpty(body),
                 author: _.isEmpty(author),
-                category: _.isEmpty(category),
             },
         });
 
-        return !_.isEmpty(title)
-            && !_.isEmpty(body)
-            && !_.isEmpty(author)
-            && !_.isEmpty(category);
+        return !_.isEmpty(body)
+            && !_.isEmpty(author);
     }
 
     updateErrors(input, error) {
@@ -159,36 +127,25 @@ class CreatePost extends React.Component {
 
     render() {
         const { edit } = this.props;
-
         const {
             id,
             timestamp,
-            title,
             author,
             body,
-            category,
-            redirect,
-            categories,
             errors,
         } = this.state;
 
-        if (redirect) {
-            return (
-                <Redirect to={`/${category}`} />
-            );
-        }
-
         return (
             <Wrapper>
-                <TextInput
-                    label='Title'
-                    value={title}
-                    onChange={this.handleTitle}
+                <TextAreaInput
+                    label='Post'
+                    value={body}
+                    onChange={this.handleBody}
                     errors={errors}
                     updateErrors={this.updateErrors}
                 />
 
-                { !edit &&
+                {!edit &&
                     <TextInput
                         label='Author'
                         value={author}
@@ -197,25 +154,6 @@ class CreatePost extends React.Component {
                         updateErrors={this.updateErrors}
                     />
                 }
-
-                { !edit &&
-                    <Select
-                        label='Category'
-                        value={category}
-                        onChange={this.handleCategory}
-                        categories={categories}
-                        errors={errors}
-                        updateErrors={this.updateErrors}
-                    />
-                }
-
-                <TextAreaInput
-                    label='Post'
-                    value={body}
-                    onChange={this.handleBody}
-                    errors={errors}
-                    updateErrors={this.updateErrors}
-                />
 
                 <Navigation>
                     <SubmitFormButton onClick={this.handleSubmitForm}>
@@ -233,8 +171,10 @@ class CreatePost extends React.Component {
     }
 }
 
-CreatePost.propTypes = {
+CreateComment.propTypes = {
     edit: PropTypes.shape(),
+    postId: PropTypes.string,
+    onClose: PropTypes.func,
 };
 
 function mapStateToProps ({ post, comment }) {
@@ -245,12 +185,12 @@ function mapStateToProps ({ post, comment }) {
 
 function mapDispatchToProps (dispatch) {
     return {
-        addPost: (data) => dispatch(addPost(data)),
-        editPost: (data) => dispatch(editPost(data)),
+        addComment: (data) => dispatch(addComment(data)),
+        editComment: (data) => dispatch(editComment(data)),
     }
 }
 
 export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(CreatePost));
+)(CreateComment));

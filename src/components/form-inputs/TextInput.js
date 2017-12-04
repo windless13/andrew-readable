@@ -19,8 +19,8 @@ export const TextInput = ({
     errors,
     updateErrors,
 }) => {
-    let hasError = errors && (errors.title && label === 'Title'
-        || errors.author && label === 'Author');
+    let hasError = errors && ((errors.title && label === 'Title')
+        || (errors.author && label === 'Author'));
 
     const handleOnFocus = () => {
         console.log('focus');

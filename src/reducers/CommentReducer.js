@@ -24,7 +24,7 @@ export const comment = (state = {}, action) => {
                 ...state,
                 comments: {
                     ...state.comments,
-                    id: {
+                    [id]: {
                         id,
                         postId,
                         timestamp,
@@ -39,8 +39,8 @@ export const comment = (state = {}, action) => {
                 ...state,
                 comments: {
                     ...state.comments,
-                    id: {
-                        ...state.comments.id,
+                    [id]: {
+                        ...state.comments[id],
                         timestamp,
                         body,
                     },
@@ -67,19 +67,21 @@ export const comment = (state = {}, action) => {
                 }),
             };
         case RECEIVE_COMMENTS:
+            const newComments = _.reduce(comments, (result, value) => {
+                result[value.id] = {
+                    id: value.id,
+                    postId: value.parentId,
+                    timestamp: value.timestamp,
+                    body: value.body,
+                    author: value.author,
+                    voteScore: value.voteScore,
+                };
+                return result;
+            }, {});
+
             return {
                 ...state,
-                comments: _.reduce(comments, (result, value) => {
-                    result[value.id] = {
-                        id: value.id,
-                        postId: value.parentId,
-                        timestamp: value.timestamp,
-                        body: value.body,
-                        author: value.author,
-                        voteScore: value.voteScore,
-                    };
-                    return result;
-                }, {}),
+                comments: _.assign({}, state.comments, newComments),
             }
         default:
             return state;

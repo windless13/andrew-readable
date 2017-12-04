@@ -11,22 +11,49 @@ const List = styled.ul`
     width: 100%;
 `
 
-const test = [1, 2, 3, 4, 5];
-
+const SortFilter = styled.select``;
 export default class PostList extends React.Component {
-    render() {
-        const {
-            posts,
-        } = this.props;
+    state = {
+        filter: '',
+    };
 
+    getFilteredPosts() {
+        const { posts } = this.props;
+        if (this.state.filter === 'timestamp') {
+            return _.filter(posts, 'timestamp');
+        } else if (this.state.filter === 'vote') {
+            return _.reverse(_.filter(posts, 'voteScore'));
+        }
+
+        return posts;
+    }
+
+    render() {
+        const filteredPosts = this.getFilteredPosts();
         return (
-            <List>
-                { _.map(posts, (post) => {
-                    return (
-                        <Post key={post.id} post={post} />
-                    )
-                })}
-            </List>
+            <div>
+                { _.isEmpty(filteredPosts)
+                    ? 'No posts found'
+                    : <SortFilter value={this.state.filter}
+                        onChange={(event) => {
+                            this.setState({
+                                filter: event.target.value
+                            })
+                        }}
+                    >
+                        <option disabled hidden value=''></option>
+                        <option value='timestamp'>Timestamp</option>
+                        <option value='vote'>Vote</option>
+                    </SortFilter>
+                }
+                <List>
+                    { _.map(filteredPosts, (post) => {
+                        return (
+                            <Post key={post.id} post={post} />
+                        )
+                    })}
+                </List>
+            </div>
         );
     }
 }

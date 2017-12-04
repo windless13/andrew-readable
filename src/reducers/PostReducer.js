@@ -37,12 +37,13 @@ export const post = (state = {}, action) => {
                 },
             };
         case EDIT_POST:
+            debugger;
             return {
                 ...state,
                 posts: {
                     ...state.posts,
-                    id: {
-                        ...state.posts.id,
+                    [id]: {
+                        ...state.posts[id],
                         title,
                         body,
                     },

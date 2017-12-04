@@ -6,7 +6,7 @@ import {
     RECEIVE_COMMENTS,
 } from './types.js';
 
-export const addComment = ({ id, postId, timestamp, author, body }) => {
+export const addComment = ({ id, timestamp, postId, author, body }) => {
     return {
         type: ADD_COMMENT,
         id,
