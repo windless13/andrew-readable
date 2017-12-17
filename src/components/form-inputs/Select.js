@@ -9,6 +9,8 @@ const Container = styled.div`
 `;
 
 const CategorySelect = styled.select`
+    height: 50px;
+
 
 `;
 

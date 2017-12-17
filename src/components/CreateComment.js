@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { withRouter, Redirect } from 'react-router';
 import { connect } from 'react-redux';
 
-import { COLORS } from '../constants.js';
+import { COLORS, COMMENT_WIDTH } from '../constants.js';
 import { addComment, editComment } from '../actions';
 import * as ReadableAPI from '../ReadableAPI.js';
 import {
@@ -18,6 +18,7 @@ import {
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
+    min-width: ${COMMENT_WIDTH};
 `;
 
 class CreateComment extends React.Component {
@@ -132,7 +133,7 @@ class CreateComment extends React.Component {
         return (
             <Wrapper>
                 <TextAreaInput
-                    label='Post'
+                    label='Comment'
                     value={body}
                     onChange={this.handleBody}
                     errors={errors}
@@ -141,7 +142,7 @@ class CreateComment extends React.Component {
 
                 {!edit &&
                     <TextInput
-                        label='Author'
+                        label='Your name'
                         value={author}
                         onChange={this.handleAuthor}
                         errors={errors}

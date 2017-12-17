@@ -4,9 +4,11 @@ import { withRouter } from 'react-router';
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import styled from 'styled-components';
+import MediaQuery from 'react-responsive';
 
 import * as ReadableAPI from './ReadableAPI.js';
 import { receivePosts } from './actions';
+import { COLORS, BREAKPOINTS } from './constants.js';
 
 import Post from './components/Post.js';
 import CreatePost from './components/CreatePost.js';
@@ -22,6 +24,7 @@ const Body = styled.div`
 class Readable extends React.Component {
     state = {
         categories: [],
+        mobileNavOpen: false,
     }
 
     componentDidMount() {
@@ -32,6 +35,20 @@ class Readable extends React.Component {
         ReadableAPI.getCategories().then((result) => {
             this.setState({ categories: _.map(result, 'name') });
         });
+    }
+
+    closeMobileNav() {
+        console.log('close');
+        this.setState({
+            mobileNavOpen: false,
+        });
+    }
+
+    toggleMobileNav() {
+        console.log('toggle');
+        this.setState(prevState => ({
+            mobileNavOpen: !prevState.mobileNavOpen,
+        }));
     }
 
     render() {
@@ -66,15 +83,25 @@ class Readable extends React.Component {
             }
 
             return (
-                <Post post={post} />
+                <Post post={post} showComments />
             )
         }
 
         return (
             <div>
-                <Header/>
+                <Header
+                    mobileNavOpen={this.state.mobileNavOpen}
+                    toggleMobileNav={this.toggleMobileNav.bind(this)}
+                    closeMobileNav={this.closeMobileNav.bind(this)}
+                    categories={this.state.categories}
+                />
+
                 <Body>
-                    <SideNav categories={this.state.categories}/>
+                    <MediaQuery query={BREAKPOINTS.desktop}>
+                        <SideNav
+                            categories={this.state.categories}
+                        />
+                    </MediaQuery>
                     <Switch>
                         <Route
                             path='/'

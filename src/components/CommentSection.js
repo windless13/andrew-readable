@@ -8,7 +8,9 @@ import Comment from './Comment.js';
 import CreateComment from './CreateComment.js';
 
 const Header = styled.div`
-
+    padding: 10px 0;
+    font: 18px 'Helvetica';
+    text-transform: uppercase;
 `;
 
 const Container = styled.div`
@@ -16,9 +18,10 @@ const Container = styled.div`
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    background-color: ${COLORS.lightBlue1};
     font: 12px 'Helvetica';
     text-align: center;
+    width: 100%;
+    background: ${COLORS.yellow1};
 `
 
 export default class CommentSection extends React.Component {
@@ -46,7 +49,6 @@ export default class CommentSection extends React.Component {
 
         return (
             <Container>
-                <Header>Add a Comment</Header>
                 {_.map(comments, (comment) => {
                     return (
                         editCommentOpen && (edit && edit.id === comment.id)
@@ -62,6 +64,7 @@ export default class CommentSection extends React.Component {
                         />
                     );
                 })}
+                <Header>Add a Comment</Header>
 
                 <CreateComment
                     postId={postId}

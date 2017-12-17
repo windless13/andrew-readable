@@ -37,7 +37,6 @@ export const post = (state = {}, action) => {
                 },
             };
         case EDIT_POST:
-            debugger;
             return {
                 ...state,
                 posts: {
@@ -50,7 +49,6 @@ export const post = (state = {}, action) => {
                 },
             };
         case VOTE_POST:
-            debugger;
             return {
                 ...state,
                 posts: {

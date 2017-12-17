@@ -15,3 +15,13 @@ export const COLORS = {
     gray2: '#9FA09F',
     gray3: '#50514F',
 };
+
+export const BREAKPOINTS = {
+    mobile: "(max-device-width: 420px)",
+    desktop: "(min-device-width: 421px)",
+    mobile_bp: "420px",
+}
+
+export const HEADER_HEIGHT = "50px";
+export const SIDENAV_WIDTH = "150px";
+export const COMMENT_WIDTH = "250px";

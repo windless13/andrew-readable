@@ -1,21 +1,19 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import _ from 'lodash';
 import styled from 'styled-components';
 import { Route, Link } from 'react-router-dom'
+import MediaQuery from 'react-responsive';
 
-import { COLORS } from '../constants.js';
-import RightMenu from './RightMenu.js';
+import { COLORS, BREAKPOINTS } from '../constants.js';
+import MobileSideNav from './MobileSideNav.js';
 import HamburgerIcon from '../icons/down.svg';
+import { Icon } from 'react-fa'
 
-const MobileMenu = styled.div`
-    position: absolute;
-    left: 0;
-    background-image: url(${HamburgerIcon});
-    background-size: contain;
-    background-repeat: no-repeat;
-    height: 100%;
-    width: 50px;
-`;
+const HamburgerStyle = {
+    position: 'absolute',
+    left: '20px',
+};
 
 const Container = styled.div`
     display: flex;
@@ -26,17 +24,41 @@ const Container = styled.div`
     font: 24px 'Helvetica';
     text-align: center;
     position: relative;
+
+    @media screen and (min-width: ${BREAKPOINTS.mobile_bp}) {
+        height: 80px;
+    }
 `
 
-export default function Header() {
-    return (
-        <Container>
-            <MobileMenu />
-            <Link to='/'>
-                Readable
-            </Link>
+export default class Header extends React.Component {
+    render() {
+        const { categories, toggleMobileNav, closeMobileNav, mobileNavOpen } = this.props;
 
-            <RightMenu/>
-        </Container>
-    );
+        return (
+            <Container>
+                <MediaQuery query={BREAKPOINTS.mobile}>
+                    <Icon
+                        name="FaBars"
+                        size='1x'
+                        style={HamburgerStyle}
+                        className="fa fa-bars"
+                        onClick={(event) => {
+                            console.log("handle on hamburger");
+                            toggleMobileNav();
+                        }}
+                        ref={(hamburger) => { this.hamburger = hamburger; }}
+                    />
+                        <MobileSideNav
+                            hamburgerRef={this.hamburger}
+                            mobileNavOpen={mobileNavOpen}
+                            closeMobileNav={closeMobileNav}
+                            categories={categories}
+                        />
+                </MediaQuery>
+                <Link to='/'>
+                    Readable
+                </Link>
+            </Container>
+        );
+    }
 }

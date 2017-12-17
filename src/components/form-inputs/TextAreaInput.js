@@ -4,11 +4,11 @@ import styled from 'styled-components';
 import { InputLabel, ErrorsMessage } from './InputStyles.js';
 
 const Container = styled.div`
-
+    margin: 10px 0;
 `;
 
 const Input = styled.textarea`
-
+    width: 100%;
 `;
 
 export const TextAreaInput = ({

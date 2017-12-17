@@ -9,6 +9,10 @@ import { Icon } from 'react-fa'
 
 var FontAwesome = require('react-fontawesome');
 const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 `
 
 export default function Vote({ score, onIncrement, onDecrement }) {
