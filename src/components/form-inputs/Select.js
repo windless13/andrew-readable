@@ -10,8 +10,7 @@ const Container = styled.div`
 
 const CategorySelect = styled.select`
     height: 50px;
-
-
+    border: 1px solid black;
 `;
 
 export const Select = ({

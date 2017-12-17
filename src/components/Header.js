@@ -30,6 +30,15 @@ const Container = styled.div`
     }
 `
 
+const HeaderTitle = styled.div`
+    text-decoration: 'none';
+    color: black;
+
+    &:hover {
+        color: ${COLORS.gray3};
+    }
+`;
+
 export default class Header extends React.Component {
     render() {
         const { categories, toggleMobileNav, closeMobileNav, mobileNavOpen } = this.props;
@@ -55,8 +64,8 @@ export default class Header extends React.Component {
                             categories={categories}
                         />
                 </MediaQuery>
-                <Link to='/'>
-                    Readable
+                <Link to='/' style={{ textDecoration: 'none' }}>
+                    <HeaderTitle>Readable</HeaderTitle>
                 </Link>
             </Container>
         );

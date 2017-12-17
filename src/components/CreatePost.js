@@ -18,6 +18,8 @@ import {
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
+    min-width: 300px;
+    margin: 20px 40px;
 `;
 
 class CreatePost extends React.Component {

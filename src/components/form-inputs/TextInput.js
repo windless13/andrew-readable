@@ -9,7 +9,8 @@ const Container = styled.div`
 
 const Input = styled.input`
     width: 100%;
-
+    font-size: 14px;
+    border: 1px solid black;
 `;
 
 export const TextInput = ({

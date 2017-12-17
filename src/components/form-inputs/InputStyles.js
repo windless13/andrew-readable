@@ -24,7 +24,10 @@ const SubmitButton = styled.button`
     width: 80px;
     height: 40px;
     flex-grow: 1;
+    font-size: 18px;
+    color: white;
     margin: 8px 12px;
+    cursor: pointer;
 
     &:hover {
         background-color: ${COLORS.darkBlue2};

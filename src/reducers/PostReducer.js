@@ -64,7 +64,7 @@ export const post = (state = {}, action) => {
         case DELETE_POST:
             return {
                 ...state,
-                posts: _.filter(state.posts, (post) => {
+                posts: _.pickBy(state.posts, (post) => {
                     return post.id !== id;
                 }),
             };

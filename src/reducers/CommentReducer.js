@@ -62,7 +62,7 @@ export const comment = (state = {}, action) => {
         case DELETE_COMMENT:
             return {
                 ...state,
-                comments: _.filter(state.comments, (comment) => {
+                comments: _.pickBy(state.comments, (comment) => {
                     return comment.id !== id;
                 }),
             };

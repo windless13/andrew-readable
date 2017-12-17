@@ -35,7 +35,6 @@ const PostContainer = styled.div`
         max-width: 800px;
         width: auto;
     }
-
 `;
 
 const VoteWrapper = styled.div`
@@ -45,6 +44,7 @@ const VoteWrapper = styled.div`
 const PostInfo = styled.div`
     padding: 10px;
     max-width: 500px;
+    flex-grow: 1;
 `;
 
 const PostHeader = styled.div`
@@ -112,6 +112,9 @@ class Post extends React.Component {
         const { post, receiveComments } = this.props;
         if (post && post.id) {
             ReadableAPI.getCommentsFromPost(post.id).then((result) => {
+                console.log(post.id);
+                console.log(post.title);
+                debugger;
                 receiveComments(result);
             });
         }
@@ -144,8 +147,8 @@ class Post extends React.Component {
     }
 
     render() {
-        const { comments, posts, post, showComments } = this.props;
-        if (!post || !posts) return null;
+        const { comments, post, showComments } = this.props;
+        if (!post) return null;
 
         const {
             id,
@@ -157,8 +160,7 @@ class Post extends React.Component {
             voteScore,
         } = post;
 
-        const commentsForPost = comments && id && _.filter(comments, ['postId', id]);
-        const currentVoteScore = id && posts[id] && posts[id].voteScore;
+        const commentsForPost = comments && id && _.filter(comments, {'postId': id});
         const timestampDate = new Date(timestamp);
         const dateString = timestampDate.toLocaleTimeString();
 
@@ -194,7 +196,7 @@ class Post extends React.Component {
                                         style={{ paddingRight: '8px' }}
                                         className="fa fa-comments-o"
                                     />
-                                    {`${_.size(comments)}`}
+                                    {`${_.size(commentsForPost)}`}
                                 </MediaQuery>
                                 <MediaQuery query={BREAKPOINTS.desktop}>
                                     <Icon
@@ -206,7 +208,7 @@ class Post extends React.Component {
                                         }}
                                         className="fa fa-comments-o"
                                     />
-                                    {`${_.size(comments)}`}
+                                    {`${_.size(commentsForPost)}`}
                                     {' '}comments
                                 </MediaQuery>
                             </NumComments>
@@ -238,7 +240,7 @@ class Post extends React.Component {
                         <Vote
                             onIncrement={this.upVote.bind(this)}
                             onDecrement={this.downVote.bind(this)}
-                            score={currentVoteScore}
+                            score={post.voteScore}
                         />
                     </VoteWrapper>
                 </PostContainer>
@@ -263,9 +265,8 @@ Post.propTypes = {
     showComments: PropTypes.bool,
 }
 
-function mapStateToProps ({ comment, post }) {
+function mapStateToProps ({ comment }) {
     return {
-        posts: post.posts,
         comments: comment.comments,
     };
 }

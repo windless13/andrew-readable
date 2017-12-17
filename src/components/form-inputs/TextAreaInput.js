@@ -9,6 +9,8 @@ const Container = styled.div`
 
 const Input = styled.textarea`
     width: 100%;
+    font-size: 14px;
+    border: 1px solid black;
 `;
 
 export const TextAreaInput = ({

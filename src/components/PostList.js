@@ -44,9 +44,9 @@ export default class PostList extends React.Component {
         const { posts } = this.props;
 
         if (this.state.filter === 'timestamp') {
-            return _.filter(posts, 'timestamp');
+            return _.sortBy(posts, 'timestamp');
         } else if (this.state.filter === 'vote') {
-            return _.reverse(_.filter(posts, 'voteScore'));
+            return _.reverse(_.sortBy(posts, 'voteScore'));
         }
 
         return posts;
