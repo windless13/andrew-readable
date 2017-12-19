@@ -27,7 +27,6 @@ export default class MobileSideNav extends React.Component {
     handleClick = (event) => {
         const { closeMobileNav, mobileNavOpen, hamburgerRef } = this.props;
 
-        console.log(hamburgerRef);
         const hamburgerNode = ReactDOM.findDOMNode(hamburgerRef);
         if (hamburgerNode && hamburgerNode.contains(event.target) &&
                 !ReactDOM.findDOMNode(this).contains(event.target)) {

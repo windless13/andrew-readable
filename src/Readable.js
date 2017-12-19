@@ -38,14 +38,12 @@ class Readable extends React.Component {
     }
 
     closeMobileNav() {
-        console.log('close');
         this.setState({
             mobileNavOpen: false,
         });
     }
 
     toggleMobileNav() {
-        console.log('toggle');
         this.setState(prevState => ({
             mobileNavOpen: !prevState.mobileNavOpen,
         }));

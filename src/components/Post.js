@@ -112,9 +112,6 @@ class Post extends React.Component {
         const { post, receiveComments } = this.props;
         if (post && post.id) {
             ReadableAPI.getCommentsFromPost(post.id).then((result) => {
-                console.log(post.id);
-                console.log(post.title);
-                debugger;
                 receiveComments(result);
             });
         }
