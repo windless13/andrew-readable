@@ -52,7 +52,6 @@ export default class Header extends React.Component {
                         style={HamburgerStyle}
                         className="fa fa-bars"
                         onClick={(event) => {
-                            console.log("handle on hamburger");
                             toggleMobileNav();
                         }}
                         ref={(hamburger) => { this.hamburger = hamburger; }}
