@@ -1,0 +1,10 @@
+STARTING THE BACKEND SERVER
+===========================
+1) Download the server repository at https://github.com/udacity/reactnd-project-readable-starter
+2) Install the requirements from the included package.json file:  'npm install'
+3) Run the server with 'node server'
+
+STARTING THE APP
+===========================
+1) 'cd' into 'andrew-readable'
+2) Run the app with 'npm start'
