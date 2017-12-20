@@ -6,8 +6,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components';
 import MediaQuery from 'react-responsive';
 
-import * as ReadableAPI from './ReadableAPI.js';
-import { receivePosts } from './actions';
+import { fetchPosts, fetchCategories } from './actions';
 import { COLORS, BREAKPOINTS } from './constants.js';
 
 import Post from './components/Post.js';
@@ -23,18 +22,12 @@ const Body = styled.div`
 
 class Readable extends React.Component {
     state = {
-        categories: [],
         mobileNavOpen: false,
     }
 
     componentDidMount() {
-        ReadableAPI.getPosts().then((result) => {
-            this.props.receivePosts(result);
-        });
-
-        ReadableAPI.getCategories().then((result) => {
-            this.setState({ categories: _.map(result, 'name') });
-        });
+        this.props.fetchPosts();
+        this.props.fetchCategories();
     }
 
     closeMobileNav() {
@@ -52,6 +45,7 @@ class Readable extends React.Component {
     render() {
         const {
             posts,
+            categories,
         } = this.props;
 
         // Route Components "pages"
@@ -91,13 +85,13 @@ class Readable extends React.Component {
                     mobileNavOpen={this.state.mobileNavOpen}
                     toggleMobileNav={this.toggleMobileNav.bind(this)}
                     closeMobileNav={this.closeMobileNav.bind(this)}
-                    categories={this.state.categories}
+                    categories={categories}
                 />
 
                 <Body>
                     <MediaQuery query={BREAKPOINTS.desktop}>
                         <SideNav
-                            categories={this.state.categories}
+                            categories={categories}
                         />
                     </MediaQuery>
                     <Switch>
@@ -115,7 +109,7 @@ class Readable extends React.Component {
                         >
                         </Route>
                         <Route
-                            exact path='/post/:id/edit'
+                            exact path='/:category/:id/edit'
                             component={EditPostPage}
                         >
                         </Route>
@@ -140,14 +134,11 @@ class Readable extends React.Component {
 function mapStateToProps ({ post }) {
     return {
         posts: post.posts,
+        categories: post.categories,
     };
 }
 
-function mapDispatchToProps (dispatch) {
-    return {
-        receivePosts: (data) => dispatch(receivePosts(data)),
-    }
-}
+const mapDispatchToProps = { fetchPosts, fetchCategories };
 
 export default withRouter(connect(
   mapStateToProps,

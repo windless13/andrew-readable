@@ -26,7 +26,7 @@ const SideBarLink = styled.div`
 export default function SideNav({ categories }) {
     return (
         <Container>
-            {categories.map((category) => {
+            {categories && categories.map((category) => {
                 return (
                     <Link style={{ textDecoration: 'none' }}key={category} to={`/${category}`}>
                         <SideBarLink>{category}</SideBarLink>

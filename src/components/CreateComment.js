@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 
 import { COLORS, COMMENT_WIDTH } from '../constants.js';
 import { addComment, editComment } from '../actions';
-import * as ReadableAPI from '../ReadableAPI.js';
 import {
     TextInput,
     TextAreaInput,
@@ -64,22 +63,12 @@ class CreateComment extends React.Component {
         if (this.validateForm()) {
             if (edit) {
                 // Edit the selected comment
-                ReadableAPI.editComment(id, body).then((result) => {
-                    editComment({ id, timestamp, body });
-                });
+                editComment(id, body);
                 onClose();
             } else {
                 // Create new comment
-                ReadableAPI.addCommentToPost(null, null, postId, body, author).then((result) => {
-                    addComment({
-                        id: result.id,
-                        timestamp: result.timestamp,
-                        postId,
-                        author,
-                        body,
-                    });
-                    this.handleClearForm();
-                });
+                addComment(postId, body, author);
+                this.handleClearForm();
             }
         }
     }
@@ -172,12 +161,7 @@ function mapStateToProps ({ post, comment }) {
     };
 }
 
-function mapDispatchToProps (dispatch) {
-    return {
-        addComment: (data) => dispatch(addComment(data)),
-        editComment: (data) => dispatch(editComment(data)),
-    }
-}
+const mapDispatchToProps = { addComment, editComment };
 
 export default withRouter(connect(
     mapStateToProps,

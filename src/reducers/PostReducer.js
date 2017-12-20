@@ -5,6 +5,7 @@ import {
     VOTE_POST,
     DELETE_POST,
     RECEIVE_POSTS,
+    FETCH_CATEGORIES,
 } from '../actions/types.js';
 
 export const post = (state = {}, action) => {
@@ -17,6 +18,7 @@ export const post = (state = {}, action) => {
         category,
         voteBool,
         posts,
+        result,
     } = action;
 
     switch (action.type) {
@@ -84,6 +86,11 @@ export const post = (state = {}, action) => {
                     return result;
                 }, {}),
             };
+        case FETCH_CATEGORIES:
+            return {
+                ...state,
+                categories: _.map(result, 'name'),
+            }
         default:
             return state;
     }

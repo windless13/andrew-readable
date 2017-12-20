@@ -6,7 +6,6 @@ import { withRouter, Redirect } from 'react-router';
 import { connect } from 'react-redux';
 
 import { COLORS } from '../constants.js';
-import * as ReadableAPI from '../ReadableAPI.js';
 import { addPost, editPost } from '../actions';
 import {
     TextInput,
@@ -35,7 +34,6 @@ class CreatePost extends React.Component {
             body: (edit && edit.body) || '',
             author: (edit && edit.author) || '',
             category: (edit && edit.category) || '',
-            categories: [],
             redirect: false,
             errors: {
                 title: false,
@@ -52,12 +50,6 @@ class CreatePost extends React.Component {
         this.handleClearForm = this.handleClearForm.bind(this);
         this.handleSubmitForm = this.handleSubmitForm.bind(this);
         this.updateErrors = this.updateErrors.bind(this);
-    }
-
-    componentWillMount() {
-        ReadableAPI.getCategories().then((result) => {
-            this.setState({ categories: _.map(result, 'name') });
-        });
     }
 
     handleBody(event) {
@@ -85,27 +77,14 @@ class CreatePost extends React.Component {
     }
 
     handleSubmitForm(event) {
-        const { edit } = this.props;
+        const { edit, addPost, editPost } = this.props;
         const { id, author, category, body, title, timestamp } = this.state;
 
         if (this.validateForm()) {
             if (edit) {
-                // Edit existing post
-                ReadableAPI.editPost(id, title, body).then((result) => {
-                    this.props.editPost({ id, title, body });
-                });
+                editPost(id, title, body);
             } else {
-                // Create new post
-                ReadableAPI.addPost(null, null, title, author, body, category).then((result) => {
-                    this.props.addPost({
-                        id: result.id,
-                        timestamp: result.timestamp,
-                        title,
-                        body,
-                        author,
-                        category,
-                    });
-                });
+                addPost(title, author, body, category);
             }
             this.setState({
                 redirect: true,
@@ -157,7 +136,7 @@ class CreatePost extends React.Component {
     }
 
     render() {
-        const { edit } = this.props;
+        const { edit, categories } = this.props;
 
         const {
             id,
@@ -167,7 +146,6 @@ class CreatePost extends React.Component {
             body,
             category,
             redirect,
-            categories,
             errors,
         } = this.state;
 
@@ -234,15 +212,11 @@ CreatePost.propTypes = {
 function mapStateToProps ({ post, comment }) {
     return {
         posts: post.posts,
+        categories: post.categories,
     };
 }
 
-function mapDispatchToProps (dispatch) {
-    return {
-        addPost: (data) => dispatch(addPost(data)),
-        editPost: (data) => dispatch(editPost(data)),
-    }
-}
+const mapDispatchToProps = { addPost, editPost };
 
 export default withRouter(connect(
     mapStateToProps,

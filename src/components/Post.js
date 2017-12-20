@@ -8,7 +8,6 @@ import { Icon } from 'react-fa'
 import MediaQuery from 'react-responsive';
 
 import { COLORS, BREAKPOINTS } from '../constants.js';
-import * as ReadableAPI from '../ReadableAPI.js';
 import { addPost, receiveComments, votePost, deletePost } from '../actions';
 import { DeleteButton, EditButton } from './form-inputs/Button.js';
 import Vote from './Vote.js';
@@ -111,9 +110,7 @@ class Post extends React.Component {
     componentDidMount() {
         const { post, receiveComments } = this.props;
         if (post && post.id) {
-            ReadableAPI.getCommentsFromPost(post.id).then((result) => {
-                receiveComments(result);
-            });
+            receiveComments(post.id);
         }
     }
 
@@ -121,26 +118,19 @@ class Post extends React.Component {
         const { post, votePost } = this.props;
         const id = post.id;
 
-        ReadableAPI.votePost(id, votePost).then(() => {
-            votePost({ id, voteBool: true });
-        });
+        votePost(id, true);
     };
 
     downVote = () => {
         const { post, votePost } = this.props;
         const id = post.id;
 
-        ReadableAPI.votePost(this.props.post.id, false).then(() => {
-            votePost({ id, voteBool: false });
-        });
-
+        votePost(id, false);
     };
 
     deletePost = () => {
         const { post, deletePost } = this.props;
-        ReadableAPI.deletePost(post.id).then(() => {
-            deletePost({ id: post.id });
-        });
+        deletePost( post.id );
     }
 
     render() {
@@ -268,14 +258,7 @@ function mapStateToProps ({ comment }) {
     };
 }
 
-function mapDispatchToProps (dispatch) {
-    return {
-        addPost: (data) => dispatch(addPost(data)),
-        votePost: (data) => dispatch(votePost(data)),
-        deletePost: (data) => dispatch(deletePost(data)),
-        receiveComments: (data) => dispatch(receiveComments(data)),
-    }
-}
+const mapDispatchToProps = { addPost, votePost, deletePost, receiveComments };
 
 export default connect(
   mapStateToProps,

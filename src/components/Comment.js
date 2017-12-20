@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 
 import Vote from './Vote.js';
 import { COLORS, COMMENT_WIDTH } from '../constants.js';
-import * as ReadableAPI from '../ReadableAPI.js';
 import { voteComment, deleteComment } from '../actions';
 import { DeleteButton, EditButton } from './form-inputs/Button.js';
 
@@ -41,27 +40,21 @@ const Author = styled.div`
 class Comment extends React.Component {
     onDelete = () => {
         const { comment, deleteComment } = this.props;
-        ReadableAPI.deleteComment(comment.id).then(() => {
-            deleteComment({ id: comment.id });
-        });
+        deleteComment(comment.id);
     };
 
     upVote = () => {
         const { comment, voteComment } = this.props;
         const id = comment.id;
 
-        ReadableAPI.voteComment(id, voteComment).then(() => {
-            voteComment({ id, voteBool: true });
-        });
+        voteComment(id, true);
     };
 
     downVote = () => {
         const { comment, voteComment } = this.props;
         const id = comment.id;
 
-        ReadableAPI.voteComment(id, false).then(() => {
-            voteComment({ id, voteBool: false });
-        });
+        voteComment(id, false);
 
     };
 
@@ -112,12 +105,7 @@ Comment.propTypes = {
     openEditComment: PropTypes.func,
 }
 
-function mapDispatchToProps (dispatch) {
-    return {
-        voteComment: (data) => dispatch(voteComment(data)),
-        deleteComment: (data) => dispatch(deleteComment(data)),
-    }
-}
+const mapDispatchToProps = { voteComment, deleteComment };
 
 export default connect(
   null,
