@@ -172,7 +172,7 @@ class Post extends React.Component {
                                     textDecoration: 'none',
                                     paddingBottom: '18px',
                                 }}
-                                to={`/post/${id}`}
+                                to={`/${category}/${id}`}
                             >
                                 <Title>{title}</Title>
                                 <Author>
@@ -219,7 +219,7 @@ class Post extends React.Component {
                         </Middle>
                         <Bottom>
                             <div>
-                                <Link to={`/post/${id}/edit`}>
+                                <Link to={`/${category}/${id}/edit`}>
                                     <EditButton />
                                 </Link>
                                 <DeleteButton

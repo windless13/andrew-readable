@@ -120,13 +120,13 @@ class Readable extends React.Component {
                         >
                         </Route>
                         <Route
-                            path='/post/:id'
-                            component={PostPage}
+                            exact path='/:category'
+                            component={CategoryPage}
                         >
                         </Route>
                         <Route
-                            path='/:category'
-                            component={CategoryPage}
+                            path='/:category/:id'
+                            component={PostPage}
                         >
                         </Route>
                     </Switch>
